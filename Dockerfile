@@ -1,19 +1,23 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 
 RUN dpkg --configure -a
 
-ENV PYTHON_VERSION 3.7.7
-ENV PYTHON_PIP_VERSION 20.1
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update
-RUN apt-get -y install gcc mono-mcs golang-go \
-    default-jre default-jdk nodejs npm \
-    python3-pip python3 curl && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get install -y --no-install-recommends \
+    gcc g++ mono-mcs curl wget openjdk-21-jdk \
+    python3 python3-pip nodejs npm
+
+ENV GOROOT=/usr/local/go
+ENV PATH=$PATH:$GOROOT/bin
+
+RUN wget https://go.dev/dl/go1.23.0.linux-amd64.tar.gz && \
+    rm -rf /usr/local/go && \
+    tar -C /usr/local -xzf go1.23.0.linux-amd64.tar.gz
 
 ENV NODE_VERSION=16.13.2
-RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
 ENV NVM_DIR=/root/.nvm
 RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
 RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
