@@ -5,9 +5,15 @@ RUN dpkg --configure -a
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update
-RUN apt-get install -y --no-install-recommends \
-    gcc g++ mono-mcs curl wget openjdk-21-jdk \
-    python3 python3-pip nodejs npm
+RUN apt-get install -y --no-install-recommends curl wget \
+    gcc g++ mono-mcs openjdk-21-jdk \
+    nodejs npm
+
+RUN apt install software-properties-common -y
+RUN add-apt-repository ppa:deadsnakes/ppa
+RUN apt install python3.12 python3.12-venv -y
+RUN rm /usr/bin/python3 && ln -s /usr/bin/python3.12 /usr/bin/python3
+RUN python3 -m ensurepip --upgrade
 
 ENV GOROOT=/usr/local/go
 ENV PATH=$PATH:$GOROOT/bin
@@ -23,7 +29,6 @@ RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
 RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
 RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
 ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
-# RUN nvm install 16.13.2
 
 COPY . /app
 WORKDIR /app
