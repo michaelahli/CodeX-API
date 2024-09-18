@@ -24,15 +24,12 @@ const commandMap = (jobID, language) => {
             };
         case 'py':
             return {
-                executeCodeCommand: join(process.cwd(), `venv_${jobID}/bin/python3`),
+                executeCodeCommand: 'python3',
                 executionArgs: [
                     join(process.cwd(), `codes/${jobID}.py`)
                 ],
                 depFile: join(process.cwd(), `codes/requirements.txt`),
-                depInstallCmd: [
-                    'python3', '-m', 'venv', join(process.cwd(), `venv_${jobID}`),
-                    '&&', join(process.cwd(), `venv_${jobID}/bin/pip`), 'install', '-r', join(process.cwd(), `codes/requirements.txt`)
-                ],
+                depInstallCmd: ['pip3', 'install', '-r', join(process.cwd(), `codes/requirements.txt`)],
                 compilerInfoCommand: 'python3 --version'
             };
         case 'c':

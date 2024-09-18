@@ -103,13 +103,6 @@ async function runCode({ language = "", code = "", input = "", packages = "" }) 
         throw err;
     }
 
-
-    await removeCodeFile(jobID, language, outputExt, depFile);
-    switch (language) {
-        case "py":
-            await removeVirtualEnv(jobID);
-    }
-
     return {
         ...result,
         language,
