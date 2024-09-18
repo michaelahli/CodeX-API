@@ -9,6 +9,8 @@ RUN apt-get install -y --no-install-recommends curl wget \
     gcc g++ mono-mcs openjdk-21-jdk \
     nodejs npm
 
+ENV PIP_ROOT_USER_ACTION=ignore
+
 RUN apt install software-properties-common -y
 RUN add-apt-repository ppa:deadsnakes/ppa
 RUN apt install python3.12 python3.12-venv -y
