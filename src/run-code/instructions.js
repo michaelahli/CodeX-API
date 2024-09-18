@@ -1,4 +1,4 @@
-const { join } = require('path')
+const { join } = require('path');
 
 const commandMap = (jobID, language) => {
     switch (language) {
@@ -24,12 +24,17 @@ const commandMap = (jobID, language) => {
             };
         case 'py':
             return {
-                executeCodeCommand: 'python3',
+                executeCodeCommand: join(process.cwd(), `venv_${jobID}/bin/python3`),
                 executionArgs: [
                     join(process.cwd(), `codes/${jobID}.py`)
                 ],
+                depFile: join(process.cwd(), `codes/requirements.txt`),
+                depInstallCmd: [
+                    'python3', '-m', 'venv', join(process.cwd(), `venv_${jobID}`),
+                    '&&', join(process.cwd(), `venv_${jobID}/bin/pip`), 'install', '-r', join(process.cwd(), `codes/requirements.txt`)
+                ],
                 compilerInfoCommand: 'python3 --version'
-            }
+            };
         case 'c':
             return {
                 compileCodeCommand: 'gcc',
@@ -41,15 +46,17 @@ const commandMap = (jobID, language) => {
                 executeCodeCommand: join(process.cwd(), `outputs/${jobID}.out`),
                 outputExt: 'out',
                 compilerInfoCommand: 'gcc --version'
-            }
+            };
         case 'js':
             return {
                 executeCodeCommand: 'node',
                 executionArgs: [
                     join(process.cwd(), `codes/${jobID}.js`)
                 ],
+                depFile: join(process.cwd(), `codes/package.json`),
+                depInstallCmd: ['npm', 'install'],
                 compilerInfoCommand: 'node --version'
-            }
+            };
         case 'go':
             return {
                 executeCodeCommand: 'go',
@@ -57,8 +64,10 @@ const commandMap = (jobID, language) => {
                     'run',
                     join(process.cwd(), `codes/${jobID}.go`)
                 ],
+                depFile: join(process.cwd(), `codes/go.mod`),
+                depInstallCmd: ['go', 'mod', 'tidy'],
                 compilerInfoCommand: 'go version'
-            }
+            };
         case 'cs':
             return {
                 compileCodeCommand: 'mcs',
@@ -75,10 +84,10 @@ const commandMap = (jobID, language) => {
                 ],
                 outputExt: 'exe',
                 compilerInfoCommand: 'mcs --version'
-            }
+            };
     }
-}
+};
 
 const supportedLanguages = ['java', 'cpp', 'py', 'c', 'js', 'go', 'cs'];
 
-module.exports = { commandMap, supportedLanguages }
+module.exports = { commandMap, supportedLanguages };
