@@ -1,4 +1,4 @@
-const { unlinkSync, rmSync } = require("fs");
+const { unlinkSync } = require("fs");
 const { join } = require("path");
 
 const removeCodeFile = async (uuid, lang, outputExt, depFile) => {
@@ -13,13 +13,6 @@ const removeCodeFile = async (uuid, lang, outputExt, depFile) => {
     }
 };
 
-const removeVirtualEnv = async (uuid) => {
-    const venvPath = join(process.cwd(), `venv_${uuid}`);
-
-    rmSync(venvPath, { recursive: true, force: true });
-};
-
 module.exports = {
     removeCodeFile,
-    removeVirtualEnv
 };
