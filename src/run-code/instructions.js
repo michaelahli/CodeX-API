@@ -1,4 +1,4 @@
-const {join} = require('path')
+const { join } = require('path')
 
 const commandMap = (jobID, language) => {
     switch (language) {
@@ -81,4 +81,4 @@ const commandMap = (jobID, language) => {
 
 const supportedLanguages = ['java', 'cpp', 'py', 'c', 'js', 'go', 'cs'];
 
-module.exports = {commandMap, supportedLanguages}
+module.exports = { commandMap, supportedLanguages }
