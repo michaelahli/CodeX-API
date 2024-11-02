@@ -17,6 +17,8 @@ RUN apt install python3.12 python3.12-venv -y
 RUN rm /usr/bin/python3 && ln -s /usr/bin/python3.12 /usr/bin/python3
 RUN python3 -m ensurepip --upgrade
 
+RUN python3 -m pip install --upgrade pip
+
 ENV GOROOT=/usr/local/go
 ENV PATH=$PATH:$GOROOT/bin
 
